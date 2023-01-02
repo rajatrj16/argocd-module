@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/ruchabhange/argocd-module.git
+    repoURL: https://github.com/rajatrj16/argocd-module.git
     targetRevision: HEAD
     path: ./application/kustomize-manifest/apps-of-apps/env-apps
   destination:
