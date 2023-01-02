@@ -31,11 +31,11 @@ patches:
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/image
-        value: 'rajatrj16/frontend-image:686970aaec9db6dad12a3b7946801935978a3196'
+        value: 'rajatrj16/frontend-image:b9df7252b93c3c6129fe0ea849ae5fcce8ff548d'
   - target:
       kind: Deployment
       name: customers-v2
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/image
-        value: 'rajatrj16/backend-image:686970aaec9db6dad12a3b7946801935978a3196'
+        value: 'rajatrj16/backend-image:b9df7252b93c3c6129fe0ea849ae5fcce8ff548d'
