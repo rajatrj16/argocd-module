@@ -1,0 +1,26 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+metadata:
+  name: skaffold-web-app
+build:
+  artifacts:
+  - image: rajatrj16/backend-image
+    context: application/customers
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - src: "application/customers/**/*.json"
+          dest: "."
+  - image: rajatrj16/frontend-image
+    context: application/web-frontend
+    docker:
+      dockerfile: Dockerfile
+    sync:
+      manual:
+        - src: "application/web-frontend/dist/**/*.ejs"
+          dest: "."
+manifests:
+  rawYaml:
+  - application/manifests/customers.yaml
+  - application/manifests/web-frontend.yaml
