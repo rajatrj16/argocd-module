@@ -3,6 +3,10 @@ kind: Config
 metadata:
   name: skaffold-web-app
 build:
+  tagPolicy:
+    dateTime:
+      format: "2006"
+      timezone: "UTC"
   artifacts:
   - image: rajatrj16/backend-image
     context: application/customers
@@ -20,6 +24,29 @@ build:
       manual:
         - src: "application/web-frontend/dist/**/*.ejs"
           dest: "."
+
+# profiles:
+#   - name: test
+#     activation:
+#       - command: test
+#     test:
+#       - image: rajatrj16/backend-image
+#         custom:
+#           - command: ./application/customers/test.sh
+#             timeoutSeconds: 300
+#             dependencies:
+#               paths:
+#               - "application/customers/test.sh"
+#   - name: lt
+#     test:
+#       - image: rajatrj16/frontend-image
+#         custom:
+#           - command: 'APPURL=$(minikube service web-frontend --url=true) ; echo "this is the app URL: $APPURL" ; hey -n 1000 -c 1 -m GET $APPURL'
+#             timeoutSeconds: 300
+#             dependencies:
+#               paths:
+#               - "app/test.sh"
+
 manifests:
   rawYaml:
   - application/manifests/customers.yaml
