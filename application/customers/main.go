@@ -36,6 +36,7 @@ func getCustomers(w http.ResponseWriter, r *http.Request) {
 		panic("failed to unmarshal")
 	}
 
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
 	json.NewEncoder(w).Encode((objMap))
 }
