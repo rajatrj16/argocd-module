@@ -1,1 +1,34 @@
 #!/bin/bash
+set -e
+echo "#############################"
+echo "Validating pre commit hooks"
+echo "#############################"
+echo "Started: Unit test"
+pwd
+./application/customers/test.sh
+echo "Done: Unit test"
+echo "#############################"
+echo "Started: Functional Test case"
+echo "Done: Functional Test case"
+echo "#############################"
+echo "Started: Container image/file scan"
+docker build -t customers:scan ./application/customers/
+docker run aquasec/trivy image --format json --output result.json --severity HIGH,CRITICAL customers:scan
+echo "Done: Container image/file scan"
+echo "#############################"
+echo "Started: kubernetes guardrails scan"
+kubesec_scan() {
+    LISTOFSCAN="LimitsCPU LimitsMemory" # RequestsCPU RequestsMemory
+    for SCANLIST in ${LISTOFSCAN}
+    do
+    echo "Scanning for $SCANLIST"
+    kubesec scan application/manifests/customers.yaml  web-frontend.yaml | jq --exit-status --arg S "$SCANLIST" '.[].scoring.passed[] | select(.id==$S)' >/dev/null || exit 1
+    kubesec scan application/manifests/web-frontend.yaml | jq --exit-status --arg S "$SCANLIST" '.[].scoring.passed[] | select(.id==$S)' >/dev/null || exit 1
+    done
+}
+kubesec_scan
+echo "Done: kubernetes guardrails scan"
+echo "#############################"
+echo "Done"
+echo "#############################"
+
